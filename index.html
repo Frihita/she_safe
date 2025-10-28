@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>She Safe 💗 Band Control</title>
+  <style>
+    :root {
+      --primary: #f88f06;
+      --accent: #ffe6ef;
+      --bg: #fae8cc;
+      --text: #333;
+      --shadow: rgba(255, 107, 159, 0.3);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--accent), #fff);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      background: white;
+      max-width: 850px;
+      width: 100%;
+      border-radius: 24px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      padding: 32px;
+      backdrop-filter: blur(12px);
+      transition: all 0.3s ease;
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--primary);
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+    }
+
+    p.subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 28px;
+    }
+
+    button {
+      background: var(--primary);
+      border: none;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      width: 100%;
+      transition: background 0.25s ease;
+    }
+
+    button:hover {
+      background: #e48a14;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--accent);
+      border-radius: 12px;
+      font-size: 15px;
+      outline: none;
+      margin-bottom: 12px;
+    }
+
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255, 107, 159, 0.2);
+    }
+
+    ul {
+      list-style: none;
+      margin-top: 10px;
+      padding: 0;
+    }
+
+    li {
+      background: var(--bg);
+      padding: 10px 14px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      border-left: 4px solid var(--primary);
+    }
+
+    li button {
+      background: transparent;
+      color: var(--primary);
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    section {
+      margin-bottom: 30px;
+    }
+
+    .tools {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .tool-btn {
+      background: #fff;
+      border: 2px dashed var(--primary);
+      color: var(--primary);
+      border-radius: 14px;
+      padding: 18px;
+      text-align: center;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .tool-btn.active {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 15px var(--shadow);
+    }
+
+    footer {
+      text-align: center;
+      color: #999;
+      margin-top: 30px;
+      font-size: 0.9rem;
+    }
+
+    #map {
+      width: 100%;
+      height: 300px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 2px solid var(--accent);
+      margin-top: 10px;
+    }
+
+    #coords {
+      text-align: center;
+      margin-top: 8px;
+      color: #777;
+    }
+
+    #fakeCall {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: white;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(10px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    #fakeCall button {
+      background: var(--primary);
+      color: white;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      margin-top: 8px;
+      cursor: pointer;
+    }
+
+    /* Safety Timer Styling */
+    .timer-section {
+      text-align: center;
+      background: var(--bg);
+      border-radius: 16px;
+      padding: 25px;
+      border: 2px solid var(--accent);
+      box-shadow: 0 6px 20px rgba(255, 107, 159, 0.1);
+    }
+
+    .timer-display {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    .timer-btns {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .timer-btns button {
+      width: auto;
+      padding: 10px 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>She_Safe</h1>
+    <p class="subtitle">Band Control Dashboard — Stay Connected, Stay Safe</p>
+
+    <!-- SOS Manager -->
+    <section>
+      <h2>📞 SOS Number Manager</h2>
+      <input type="text" id="sosInput" placeholder="Enter SOS Number 📱">
+      <button id="addBtn">Add SOS Number</button>
+      <ul id="sosList"></ul>
+    </section>
+
+    <!-- GPS Section -->
+    <section>
+      <h2>📍 Live GPS Location</h2>
+      <div id="map"></div>
+      <p id="coords">Fetching location...</p>
+    </section>
+
+    <!-- Safety Timer -->
+    <section>
+      <h2>⏱ Safety Timer</h2>
+      <div class="timer-section">
+        <div class="timer-display" id="timerDisplay">300 seconds remaining</div>
+        <div class="timer-btns">
+          <button id="startTimerBtn">Start Safety Timer</button>
+          <button id="cancelTimerBtn" disabled>Cancel Timer</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Safety Tools -->
+    <section>
+      <h2>🛡️ Safety Tools</h2>
+      <div class="tools">
+        <div class="tool-btn" id="alertBtn">Emergency Alert 🚨</div>
+        <div class="tool-btn" id="fakeCallBtn">Fake Call 📲</div>
+        <div class="tool-btn" id="flashBtn">Flashlight Blink 💡</div>
+      </div>
+    </section>
+
+    <footer>Made with 💗 by Fiona</footer>
+  </div>
+
+  <!-- Fake Call -->
+  <div id="fakeCall">
+    <strong>Incoming Call</strong>
+    <p>Mom 👩‍👧</p>
+    <button onclick="endFakeCall()">End Call</button>
+  </div>
+
+  <script>
+    // ---------- SOS Manager ----------
+    const sosList = document.getElementById("sosList");
+    const sosInput = document.getElementById("sosInput");
+    const addBtn = document.getElementById("addBtn");
+    let sosNumbers = JSON.parse(localStorage.getItem("sosNumbers")) || [];
+
+    function renderSOS() {
+      sosList.innerHTML = "";
+      sosNumbers.forEach((num, i) => {
+        const li = document.createElement("li");
+        li.innerHTML = `${i + 1}. ${num} <button onclick="deleteSOS(${i})">✖</button>`;
+        sosList.appendChild(li);
+      });
+    }
+
+    function deleteSOS(i) {
+      sosNumbers.splice(i, 1);
+      localStorage.setItem("sosNumbers", JSON.stringify(sosNumbers));
+      renderSOS();
+    }
+
+    addBtn.addEventListener("click", () => {
+      const num = sosInput.value.trim();
+      if (num === "") return alert("Please enter a valid number 📱");
+      sosNumbers.push(num);
+      localStorage.setItem("sosNumbers", JSON.stringify(sosNumbers));
+      sosInput.value = "";
+      renderSOS();
+    });
+    renderSOS();
+
+    // ---------- GPS ----------
+    const mapDiv = document.getElementById("map");
+    const coords = document.getElementById("coords");
+    function updateMap(lat, lon) {
+      mapDiv.innerHTML = `<iframe src="https://maps.google.com/maps?q=${lat},${lon}&z=15&output=embed" width="100%" height="100%" style="border:0;"></iframe>`;
+      coords.textContent = `Latitude: ${lat.toFixed(5)} | Longitude: ${lon.toFixed(5)}`;
+    }
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(pos => {
+        updateMap(pos.coords.latitude, pos.coords.longitude);
+      }, () => {
+        coords.textContent = "Unable to fetch location 🥲";
+      });
+    }
+
+    // ---------- Safety Timer ----------
+    const timerDisplay = document.getElementById("timerDisplay");
+    const startTimerBtn = document.getElementById("startTimerBtn");
+    const cancelTimerBtn = document.getElementById("cancelTimerBtn");
+    let timerSeconds = 300;
+    let timerInterval = null;
+
+    function updateTimerDisplay() {
+      timerDisplay.textContent = `${timerSeconds} seconds remaining`;
+    }
+
+    startTimerBtn.addEventListener("click", () => {
+      startTimerBtn.disabled = true;
+      cancelTimerBtn.disabled = false;
+      timerInterval = setInterval(() => {
+        if (timerSeconds > 0) {
+          timerSeconds--;
+          updateTimerDisplay();
+        } else {
+          clearInterval(timerInterval);
+          alert("🚨 Safety alert sent to your contacts!");
+          timerSeconds = 300;
+          updateTimerDisplay();
+          startTimerBtn.disabled = false;
+          cancelTimerBtn.disabled = true;
+        }
+      }, 1000);
+    });
+
+    cancelTimerBtn.addEventListener("click", () => {
+      clearInterval(timerInterval);
+      timerSeconds = 300;
+      updateTimerDisplay();
+      startTimerBtn.disabled = false;
+      cancelTimerBtn.disabled = true;
+    });
+
+    // ---------- Tools ----------
+    const alertBtn = document.getElementById("alertBtn");
+    const fakeCallBtn = document.getElementById("fakeCallBtn");
+    const flashBtn = document.getElementById("flashBtn");
+    let blinkActive = false;
+
+    alertBtn.addEventListener("click", () => {
+      document.body.style.background = "linear-gradient(135deg, #ff4d8b, #fff)";
+      alert("🚨 Emergency Alert Activated! 🚨");
+      setTimeout(() => (document.body.style.background = "linear-gradient(135deg, var(--accent), #fff)"), 2000);
+    });
+
+    fakeCallBtn.addEventListener("click", () => {
+      document.getElementById("fakeCall").style.display = "block";
+      fakeCallBtn.classList.add("active");
+      setTimeout(() => fakeCallBtn.classList.remove("active"), 2000);
+    });
+
+    function endFakeCall() {
+      document.getElementById("fakeCall").style.display = "none";
+    }
+
+    flashBtn.addEventListener("click", () => {
+      blinkActive = !blinkActive;
+      flashBtn.classList.toggle("active");
+      if (blinkActive) {
+        let blink = true;
+        const interval = setInterval(() => {
+          document.body.style.background = blink ? "#fff" : "#ffb6c1";
+          blink = !blink;
+          if (!blinkActive) {
+            clearInterval(interval);
+            document.body.style.background = "linear-gradient(135deg, var(--accent), #fff)";
+          }
+        }, 400);
+      }
+    });
+  </script>
+</body>
+</html>
